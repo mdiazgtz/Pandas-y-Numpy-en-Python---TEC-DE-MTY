@@ -1,0 +1,97 @@
+# ========================================
+
+# Reto: Análisis de Vacunación COVID-19 || MICHELLE DÍAZ GUTIÉRREZ || DATA SCIENCE MAYO 2025
+
+# ========================================
+
+# Importación de librerías
+import pandas as pd
+
+# ========================================
+# a. Extraer la información del archivo
+# ========================================
+# Asegúrate de subir el archivo 'country_vaccinations.csv' en Colab
+from google.colab import files
+uploaded = files.upload()
+
+df = pd.read_csv("country_vaccinations.csv")
+
+# ========================================
+# b. Mostrar estructura y tipos de datos
+# ========================================
+print(df.info())
+print(df.head())
+
+# Convertir columna de fecha
+df['date'] = pd.to_datetime(df['date'], format='%Y-%m-%d', errors='coerce')
+print(df.dtypes)
+
+# ========================================
+# c. Cantidad de vacunas aplicadas por compañía
+# ========================================
+# Cada país puede reportar varias vacunas separadas por coma.
+# Agrupamos por la columna 'vaccines' y sumamos las vacunaciones totales.
+vacunas_por_compania = df.groupby("vaccines")["total_vaccinations"].sum()
+print(vacunas_por_compania)
+
+# ========================================
+# d. Cantidad de vacunas aplicadas en todo el mundo
+# ========================================
+total_mundial = df["total_vaccinations"].sum()
+print("Vacunas aplicadas en todo el mundo:", total_mundial)
+
+# ========================================
+# e. Promedio de vacunas aplicadas por país
+# ========================================
+promedio_pais = df.groupby("country")["total_vaccinations"].max().mean()
+print("Promedio de vacunas aplicadas por país:", promedio_pais)
+
+# ========================================
+# f. Cantidad de vacunas aplicadas el día 29/01/21 en todo el mundo
+# ========================================
+vacunas_29ene = df[df["date"] == "2021-01-29"]["daily_vaccinations"].sum()
+print("Vacunas aplicadas el 29/01/21 en todo el mundo:", vacunas_29ene)
+
+# ========================================
+# g. Dataframe con diferencias
+# ========================================
+df["diferencias"] = df["daily_vaccinations"] - df["daily_vaccinations_raw"]
+conDiferencias = df.copy()
+print(conDiferencias.head())
+
+# ========================================
+# h. Periodo de tiempo entre la fecha más reciente y la más antigua
+# ========================================
+rango_fechas = df["date"].max() - df["date"].min()
+print("Periodo de tiempo:", rango_fechas)
+
+# ========================================
+# i. Dataframe con cantidad de vacunas por día (separando lista)
+# ========================================
+df["canVac"] = df["vaccines"].apply(lambda x: len(x.split(",")))
+conCantidad = df.copy()
+print(conCantidad[["country","date","vaccines","canVac"]].head())
+
+# ========================================
+# j. Dataframe antes del 20/12/2020
+# ========================================
+antes20 = df[df["date"] < "2020-12-20"].copy()
+print(antes20.head())
+
+# ========================================
+# k. Dataframe con registros donde se usó Pfizer
+# ========================================
+pfizer = df[df["vaccines"].str.contains("Pfizer", case=False, na=False)].copy()
+print(pfizer.head())
+
+# ========================================
+# l. Guardar todos los dataframes en Excel
+# ========================================
+with pd.ExcelWriter("resultadosReto.xlsx") as writer:
+    conDiferencias.to_excel(writer, sheet_name="conDiferencias", index=False)
+    conCantidad.to_excel(writer, sheet_name="conCantidad", index=False)
+    antes20.to_excel(writer, sheet_name="antes20", index=False)
+    pfizer.to_excel(writer, sheet_name="pfizer", index=False)
+
+# Descargar archivo en Colab
+files.download("resultadosReto.xlsx")
