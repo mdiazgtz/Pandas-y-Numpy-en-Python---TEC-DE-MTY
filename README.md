@@ -4,7 +4,7 @@ Este repositorio contiene la solución al reto de análisis de datos de vacunaci
 
 ## Contenido
 - **https://github.com/mdiazgtz/Pandas-y-Numpy-en-Python---TEC-DE-MTY/blob/main/DS_C2_SC2_MichelleDiazGutierrez** → Libreta en Google Colab con el desarrollo paso a paso.
-- **resultadosReto.xlsx** → Archivo Excel con los dataframes generados (varias hojas).
+
 
 ## Instrucciones
 1. Descargar el dataset `country_vaccinations.csv` desde Kaggle.
