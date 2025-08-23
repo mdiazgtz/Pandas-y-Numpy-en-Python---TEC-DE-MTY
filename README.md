@@ -1,4 +1,4 @@
-# Reto de Vacunación COVID-19 🦠💉
+# Reto de Vacunación COVID-19 
 
 Este repositorio contiene la solución al reto de análisis de datos de vacunación mundial usando Python y Pandas.
 
